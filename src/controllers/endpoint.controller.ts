@@ -1,5 +1,6 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
+import { Layout } from "../views/layout";
 
 export class EndpointController implements Controller {
   routing: Route[] = [
@@ -9,7 +10,8 @@ export class EndpointController implements Controller {
 
   index(req: any, res: any) {
     const endpoints = EndpointModel.getAll();
-    res.send(endpoints);
+    const layout = new Layout('Mock API Studio - Endpoints', JSON.stringify(endpoints, null, 2));
+    res.send(layout.render());
   }
 
   show(req: any, res: any) {
@@ -19,6 +21,7 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    res.send(endpoint);
+    const layout = new Layout('Mock API Studio - Endpoint', JSON.stringify(endpoint, null, 2));
+    res.send(layout.render());
   }
 }
