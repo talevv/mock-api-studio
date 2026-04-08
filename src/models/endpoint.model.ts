@@ -19,6 +19,8 @@ export class EndpointModel {
     return [
       new EndpointModel('1', 'Get Users', '/users', 'GET', '', true),
       new EndpointModel('2', 'Create User', '/users', 'POST', '{"name": "John Doe"}', false),
+      new EndpointModel('3', 'Update User', '/users/:id', 'PUT', '{"name": "John Doe Updated"}', false),
+      new EndpointModel('4', 'Delete User', '/users/:id', 'DELETE', '', false),
     ];
   }
 

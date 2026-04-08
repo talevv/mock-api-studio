@@ -1,5 +1,6 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
+import { EndpointsListView } from "../views/endpoints-list.view";
 import { Layout } from "../views/layout";
 
 export class EndpointController implements Controller {
@@ -10,7 +11,8 @@ export class EndpointController implements Controller {
 
   index(req: any, res: any) {
     const endpoints = EndpointModel.getAll();
-    const layout = new Layout('Mock API Studio - Endpoints', JSON.stringify(endpoints, null, 2));
+    const view = new EndpointsListView(endpoints);
+    const layout = new Layout('Mock API Studio - Endpoints', view.render());
     res.send(layout.render());
   }
 

@@ -12,6 +12,7 @@ export class Layout {
       <html>
         <head>
           <title>${this.title}</title>
+          <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         </head>
         <body>
           ${this.content}
