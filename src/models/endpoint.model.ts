@@ -29,6 +29,11 @@ export class EndpointModel {
     return endpoints.find(endpoint => endpoint.id === id) || null;
   }
 
+  static activate(ids: string[]): EndpointModel[] {
+    const endpoints = EndpointModel.getAll();
+    return endpoints.map(endpoint => new EndpointModel(endpoint.id, endpoint.name, endpoint.path, endpoint.method, endpoint.body, ids.includes(endpoint.id)));
+  }
+
   save(): void {
     console.log(`Saving endpoint: ${this.name}`);
   }

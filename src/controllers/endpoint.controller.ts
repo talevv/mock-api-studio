@@ -7,6 +7,7 @@ export class EndpointController implements Controller {
   routing: Route[] = [
     { method: 'get', path: '/endpoints', handler: this.index },
     { method: 'get', path: '/endpoints/:id', handler: this.show },
+    { method: 'post', path: '/endpoints/activate', handler: this.activate }
   ]
 
   index(req: any, res: any) {
@@ -24,6 +25,14 @@ export class EndpointController implements Controller {
       return;
     }
     const layout = new Layout('Mock API Studio - Endpoint', JSON.stringify(endpoint, null, 2));
+    res.send(layout.render());
+  }
+  
+  activate(req: any, res: any) {
+    const { active } = req.body;
+    const activatedEndpoints =  EndpointModel.activate(Array.isArray(active) ? active : [active]);
+    const view = new EndpointsListView(activatedEndpoints, true);
+    const layout = new Layout('Mock API Studio - Endpoints', view.render());
     res.send(layout.render());
   }
 }

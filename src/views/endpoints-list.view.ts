@@ -2,9 +2,11 @@ import { EndpointModel } from "../models/endpoint.model";
 
 export class EndpointsListView {
   endpoints: EndpointModel[];
+  updateSuccess: boolean = false;
 
-  constructor(endpoints: EndpointModel[]) {
+  constructor(endpoints: EndpointModel[], updateSuccess: boolean = false) {
     this.endpoints = endpoints;
+    this.updateSuccess = updateSuccess;
   }
 
   private mapMethodToColor(method: string): string {
@@ -45,6 +47,9 @@ export class EndpointsListView {
           </td>
           <td class="p-2 border-b border-slate-200 ">${endpoint.name}</td>
           <td class="p-2 border-b border-slate-200 font-mono text-sm">${endpoint.path}</td>
+          <td class="p-2 border-b border-slate-200 ">
+            <input type="checkbox" name="active" value="${endpoint.id}" ${endpoint.active ? 'checked' : ''}>
+          </td>
         </tr>
     `}).join('');
 
@@ -55,18 +60,30 @@ export class EndpointsListView {
           <p class="mt-1 text-sm text-slate-600">A table view of API endpoints with method, name, and path.</p>
         </div>
 
-        <table class="table-auto w-full mt-4 border-collapse text-left border border-slate-200">
-          <thead>
-            <tr class="bg-gray-100">
-              <th class="p-2 border-b border-slate-200 ">Method</th>
-              <th class="p-2 border-b border-slate-200 ">Name</th>
-              <th class="p-2 border-b border-slate-200 ">Path</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows}
-          </tbody>
-        </table>
+        ${this.updateSuccess ? (
+          `<div class="mt-4 p-4 bg-green-100 text-green-800">
+            Endpoints updated successfully!
+          </div>`
+        ) : ''}
+
+        <form method="POST" action="/endpoints/activate">
+          <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Save Changes
+          </button>
+          <table class="table-auto w-full mt-4 border-collapse text-left border border-slate-200">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="p-2 border-b border-slate-200 ">Method</th>
+                <th class="p-2 border-b border-slate-200 ">Name</th>
+                <th class="p-2 border-b border-slate-200 ">Path</th>
+                <th class="p-2 border-b border-slate-200 ">Active</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </form>
       </section>
     `;
   }

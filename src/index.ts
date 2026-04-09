@@ -7,6 +7,8 @@ const app = express();
 const port = 3000;
 const endpointController = new EndpointController();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 registerEndpoints([endpointController], app);
 
 app.listen(port, () => {
