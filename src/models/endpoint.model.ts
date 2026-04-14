@@ -1,3 +1,11 @@
+// This is a simple in-memory model for API endpoints. In a real application, this would be replaced with a database or persistent storage layer.
+const endpointsDbRows = [
+  { id: '1', name: 'Get Users', path: '/users', method: 'GET', body: '', active: true },
+  { id: '2', name: 'Create User', path: '/users', method: 'POST', body: '{"name": "John Doe"}', active: false },
+  { id: '3', name: 'Update User', path: '/users/:id', method: 'PUT', body: '{"name": "John Doe Updated"}', active: false },
+  { id: '4', name: 'Delete User', path: '/users/:id', method: 'DELETE', body: '', active: false },
+];
+
 export class EndpointModel {
   id: string;
   name: string;
@@ -16,12 +24,7 @@ export class EndpointModel {
   }
 
   static getAll(): EndpointModel[] {
-    return [
-      new EndpointModel('1', 'Get Users', '/users', 'GET', '', true),
-      new EndpointModel('2', 'Create User', '/users', 'POST', '{"name": "John Doe"}', false),
-      new EndpointModel('3', 'Update User', '/users/:id', 'PUT', '{"name": "John Doe Updated"}', false),
-      new EndpointModel('4', 'Delete User', '/users/:id', 'DELETE', '', false),
-    ];
+    return endpointsDbRows.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
   }
 
   static getById(id: string): EndpointModel | null {
@@ -30,8 +33,12 @@ export class EndpointModel {
   }
 
   static activate(ids: string[]): EndpointModel[] {
-    const endpoints = EndpointModel.getAll();
-    return endpoints.map(endpoint => new EndpointModel(endpoint.id, endpoint.name, endpoint.path, endpoint.method, endpoint.body, ids.includes(endpoint.id)));
+    // modify the in-memory database to reflect the new active states
+    for (const endpoint of endpointsDbRows) {
+      endpoint.active = ids.includes(endpoint.id);
+    }
+
+    return endpointsDbRows.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
   }
 
   save(): void {
