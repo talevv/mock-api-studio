@@ -12,6 +12,7 @@ export class EndpointController implements Controller {
     { method: 'post', path: '/endpoints/create', handler: this.store },
     { method: 'post', path: '/endpoints/activate', handler: this.activate },
     { method: 'get', path: '/endpoints/:id', handler: this.show },
+    { method: 'post', path: '/endpoints/:id/delete', handler: this.delete }
   ]
 
   index(req: any, res: any) {
@@ -52,6 +53,17 @@ export class EndpointController implements Controller {
     const { name, path, method, body } = req.body;
     const endpoint = new EndpointModel('', name, path, method, body);
     endpoint.save();
+    res.redirect('/endpoints');
+  }
+
+  delete(req: any, res: any) {
+    const { id } = req.params;
+    const endpoint = EndpointModel.getById(id);
+    if (!endpoint) {
+      res.status(404).send('Endpoint not found');
+      return;
+    }
+    endpoint.delete();
     res.redirect('/endpoints');
   }
 }

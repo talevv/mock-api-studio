@@ -38,6 +38,11 @@ export class EndpointsListView {
           <td class="p-2 border-b border-slate-200 ">
             <input type="checkbox" name="active" value="${endpoint.id}" ${endpoint.active ? 'checked' : ''}>
           </td>
+          <td class="p-2 border-b border-slate-200 ">
+            <button type="submit" class="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700" formmethod="post" formaction="/endpoints/${endpoint.id}/delete">
+              Delete
+            </button>
+          </td>
         </tr>
     `}).join('');
 
@@ -65,6 +70,7 @@ export class EndpointsListView {
                 <th class="p-2 border-b border-slate-200 ">Name</th>
                 <th class="p-2 border-b border-slate-200 ">Path</th>
                 <th class="p-2 border-b border-slate-200 ">Active</th>
+                <th class="p-2 border-b border-slate-200 ">Actions</th>
               </tr>
             </thead>
             <tbody>

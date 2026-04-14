@@ -30,6 +30,10 @@ export class DbMemory {
     }));
     return this.endpoints;
   }
+
+  delete(id: string) {
+    this.endpoints = this.endpoints.filter(endpoint => endpoint.id !== id);
+  }
 }
 
 export const memoryDb = new DbMemory();

@@ -43,4 +43,8 @@ export class EndpointModel {
       path: this.path
     });
   }
+
+  delete(): void {
+    memoryDb.delete(this.id);
+  }
 }
