@@ -68,7 +68,7 @@ export class EndpointsListView {
 
         <form method="POST" action="/endpoints/activate">
           <button type="submit" class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            Save Changes
+            Save active endpoints
           </button>
           <table class="table-auto w-full mt-4 border-collapse text-left border border-slate-200">
             <thead>
