@@ -1,11 +1,6 @@
-// This is a simple in-memory model for API endpoints. In a real application, this would be replaced with a database or persistent storage layer.
-const endpointsDbRows = [
-  { id: '1', name: 'Get Users', path: '/users', method: 'GET', body: '', active: true },
-  { id: '2', name: 'Create User', path: '/users', method: 'POST', body: '{"name": "John Doe"}', active: false },
-  { id: '3', name: 'Update User', path: '/users/:id', method: 'PUT', body: '{"name": "John Doe Updated"}', active: false },
-  { id: '4', name: 'Delete User', path: '/users/:id', method: 'DELETE', body: '', active: false },
-];
+import { memoryDb } from "../db/db-memory";
 
+// TODO migrate to use SQLite or similar for better data management and persistence
 export class EndpointModel {
   id: string;
   name: string;
@@ -24,7 +19,7 @@ export class EndpointModel {
   }
 
   static getAll(): EndpointModel[] {
-    return endpointsDbRows.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
+    return memoryDb.getAll().map((row: any) => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
   }
 
   static getById(id: string): EndpointModel | null {
@@ -33,18 +28,14 @@ export class EndpointModel {
   }
 
   static activate(ids: string[]): EndpointModel[] {
-    // modify the in-memory database to reflect the new active states
-    for (const endpoint of endpointsDbRows) {
-      endpoint.active = ids.includes(endpoint.id);
-    }
-
-    return endpointsDbRows.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
+    const endpoints = memoryDb.activate(ids);
+    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
   }
 
   save(): void {
     console.log(`Saving endpoint: ${this.name}`);
-    endpointsDbRows.push({
-      id: endpointsDbRows.length + 1 + '', // simple auto-increment id
+    memoryDb.save({
+      id: memoryDb.getAll().length + 1 + '', // simple auto-increment id
       name: this.name,
       body: this.body,
       method: this.method,
