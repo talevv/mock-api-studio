@@ -3,6 +3,7 @@ export class EndpointCreateView {
   render(): string {
     return `
       <section class="p-6">
+        <a href="/endpoints" class="text-blue-600 hover:underline mb-4 inline-block">&larr; Back to Endpoints</a>
         <h1 class="text-2xl font-semibold text-slate-900">Create New Endpoint</h1>
         <form method="POST" action="/endpoints/create" class="mt-4 space-y-4">
           <div>

@@ -1,4 +1,5 @@
 import { EndpointModel } from "../models/endpoint.model";
+import { mapMethodToColor } from "../helpers/helpers";
 
 export class EndpointsListView {
   endpoints: EndpointModel[];
@@ -7,23 +8,6 @@ export class EndpointsListView {
   constructor(endpoints: EndpointModel[], updateSuccess: boolean = false) {
     this.endpoints = endpoints;
     this.updateSuccess = updateSuccess;
-  }
-
-  private mapMethodToColor(method: string): string {
-    switch (method.toUpperCase()) {
-      case 'GET':
-        return 'bg-green-100 text-green-800';
-      case 'POST':
-        return 'bg-blue-100 text-blue-800';
-      case 'PUT':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'DELETE':
-        return 'bg-red-100 text-red-800';
-      case 'PATCH':
-        return 'bg-purple-100 text-purple-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
   }
 
   render(): string {
@@ -41,11 +25,15 @@ export class EndpointsListView {
       return `
         <tr class="${bgClass}">
           <td class="p-2 border-b border-slate-200">
-            <span class="${this.mapMethodToColor(endpoint.method)} px-2 py-1 rounded-md text-xs font-medium}">
+            <span class="${mapMethodToColor(endpoint.method)} px-2 py-1 rounded-md text-xs font-medium}">
               ${endpoint.method}
             </span>
           </td>
-          <td class="p-2 border-b border-slate-200 ">${endpoint.name}</td>
+          <td class="p-2 border-b border-slate-200">
+          <a href="/endpoints/${endpoint.id}" class="text-blue-600 hover:underline">
+            ${endpoint.name}
+          </a>
+          </td>
           <td class="p-2 border-b border-slate-200 font-mono text-sm">${endpoint.path}</td>
           <td class="p-2 border-b border-slate-200 ">
             <input type="checkbox" name="active" value="${endpoint.id}" ${endpoint.active ? 'checked' : ''}>

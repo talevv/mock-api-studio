@@ -1,6 +1,7 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
 import { EndpointCreateView } from "../views/endpoint-create.view";
+import { EndpointShowView } from "../views/endpoint-show.view";
 import { EndpointsListView } from "../views/endpoints-list.view";
 import { Layout } from "../views/layout";
 
@@ -27,7 +28,8 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const layout = new Layout('Mock API Studio - Endpoint', JSON.stringify(endpoint, null, 2));
+    const view = new EndpointShowView(endpoint);
+    const layout = new Layout('Mock API Studio - Endpoint', view.render());
     res.send(layout.render());
   }
   
