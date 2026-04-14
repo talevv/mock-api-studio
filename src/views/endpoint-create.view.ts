@@ -1,0 +1,36 @@
+
+export class EndpointCreateView {
+  render(): string {
+    return `
+      <section class="p-6">
+        <h1 class="text-2xl font-semibold text-slate-900">Create New Endpoint</h1>
+        <form method="POST" action="/endpoints/create" class="mt-4 space-y-4">
+          <div>
+            <label for="name" class="block text-sm font-medium text-slate-700">Name</label>
+            <input type="text" name="name" id="name" required class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2">
+          </div>
+          <div>
+            <label for="path" class="block text-sm font-medium text-slate-700">Path</label>
+            <input type="text" name="path" id="path" required class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2">
+          </div>
+          <div>
+            <label for="method" class="block text-sm font-medium text-slate-700">Method</label>
+            <select name="method" id="method" required class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
+          </div>
+          <div>
+            <label for="body" class="block text-sm font-medium text-slate-700">Request Body (JSON)</label>
+            <textarea name="body" id="body" rows="4" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2"></textarea>
+          </div>
+          <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            Create Endpoint
+          </button>
+        </form>
+      </section>
+    `;
+  }
+}

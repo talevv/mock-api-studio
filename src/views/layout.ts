@@ -20,7 +20,8 @@ export class Layout {
               <a href="/endpoints" class="text-white text-lg font-semibold">Mock API Studio</a>
               <div>
                 <a href="/endpoints" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Endpoints</a>
-              </div>
+                <a href="/endpoints/create" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create Endpoint</a>
+                </div>
             </div>
           </nav>
           ${this.content}

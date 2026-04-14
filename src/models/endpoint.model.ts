@@ -43,5 +43,13 @@ export class EndpointModel {
 
   save(): void {
     console.log(`Saving endpoint: ${this.name}`);
+    endpointsDbRows.push({
+      id: endpointsDbRows.length + 1 + '', // simple auto-increment id
+      name: this.name,
+      body: this.body,
+      method: this.method,
+      active: false,
+      path: this.path
+    });
   }
 }

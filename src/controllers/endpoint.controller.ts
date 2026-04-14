@@ -1,13 +1,16 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
+import { EndpointCreateView } from "../views/endpoint-create.view";
 import { EndpointsListView } from "../views/endpoints-list.view";
 import { Layout } from "../views/layout";
 
 export class EndpointController implements Controller {
   routing: Route[] = [
     { method: 'get', path: '/endpoints', handler: this.index },
+    { method: 'get', path: '/endpoints/create', handler: this.create },
+    { method: 'post', path: '/endpoints/create', handler: this.store },
+    { method: 'post', path: '/endpoints/activate', handler: this.activate },
     { method: 'get', path: '/endpoints/:id', handler: this.show },
-    { method: 'post', path: '/endpoints/activate', handler: this.activate }
   ]
 
   index(req: any, res: any) {
@@ -34,5 +37,19 @@ export class EndpointController implements Controller {
     const view = new EndpointsListView(activatedEndpoints, true);
     const layout = new Layout('Mock API Studio - Endpoints', view.render());
     res.send(layout.render());
+  }
+
+  create(req: any, res: any) {
+    console.log('Rendering create endpoint form');
+    const view = new EndpointCreateView();
+    const layout = new Layout('Mock API Studio - Create Endpoint', view.render());
+    res.send(layout.render());
+  }
+
+  store(req: any, res: any) {
+    const { name, path, method, body } = req.body;
+    const endpoint = new EndpointModel('', name, path, method, body);
+    endpoint.save();
+    res.redirect('/endpoints');
   }
 }
