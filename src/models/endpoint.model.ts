@@ -1,6 +1,5 @@
-import { memoryDb } from "../db/db-memory";
+import { db } from "../db/db-sqlite";
 
-// TODO migrate to use SQLite or similar for better data management and persistence
 export class EndpointModel {
   id: string;
   name: string;
@@ -21,43 +20,35 @@ export class EndpointModel {
   }
 
   static getAll(): EndpointModel[] {
-    return memoryDb.getAll().map((row: any) => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder)).sort((a, b) => a.sortOrder - b.sortOrder);
+    return db.prepare('SELECT * FROM endpoints ORDER BY sort_order ASC').all().map((row: any) => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sort_order));
   }
 
   static getById(id: string): EndpointModel | null {
-    const endpoints = EndpointModel.getAll();
-    return endpoints.find(endpoint => endpoint.id === id) || null;
+    const endpoint: any = db.prepare('SELECT * FROM endpoints WHERE id = ?').get(id);
+    return endpoint ? new EndpointModel(endpoint.id, endpoint.name, endpoint.path, endpoint.method, endpoint.body, endpoint.active, endpoint.sort_order) : null;
   }
 
   static activate(ids: string[]): EndpointModel[] {
-    const endpoints = memoryDb.activate(ids);
-    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder)).sort((a, b) => a.sortOrder - b.sortOrder);
+    db.prepare('UPDATE endpoints SET active = CASE WHEN id IN (' + ids.map(() => '?').join(',') + ') THEN 1 ELSE 0 END').run(...ids);
+    return this.getAll();
   }
 
   save(): void {
-    console.log(`Saving endpoint: ${this.name}`);
-    memoryDb.save({
-      id: memoryDb.getAll().length + 1 + '', // simple auto-increment id
-      name: this.name,
-      body: this.body,
-      method: this.method,
-      active: false,
-      path: this.path
-    });
+    const row: any = db.prepare('SELECT MAX(sort_order) AS max_sort_order FROM endpoints').get();
+    const nextSortOrder = (row?.max_sort_order ?? 0) + 1;
+    this.sortOrder = nextSortOrder;
+    const activeValue = this.active ? 1 : 0;
+    db.prepare('INSERT INTO endpoints (name, path, method, body, active, sort_order) VALUES (?, ?, ?, ?, ?, ?)')
+      .run(this.name, this.path, this.method, this.body, activeValue, this.sortOrder);
   }
 
   delete(): void {
-    memoryDb.delete(this.id);
+    db.prepare('DELETE FROM endpoints WHERE id = ?').run(this.id);
   }
 
   update(): void {
-    memoryDb.update(this.id, {
-      name: this.name,
-      body: this.body,
-      method: this.method,
-      active: this.active,
-      path: this.path,
-      sortOrder: this.sortOrder
-    });
+    const activeValue = this.active ? 1 : 0;
+    db.prepare('UPDATE endpoints SET name = ?, path = ?, method = ?, body = ?, active = ?, sort_order = ? WHERE id = ?')
+      .run(this.name, this.path, this.method, this.body, activeValue, this.sortOrder, this.id);
   }
 }

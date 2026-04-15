@@ -119,7 +119,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const { direction } = req.body;
     const endpoints = EndpointModel.getAll();
-    const index = endpoints.findIndex(e => e.id === id);
+    const index = endpoints.findIndex(e => e.id?.toString() === id);
     if (index === -1) {
       res.status(404).send('Endpoint not found');
       return;
