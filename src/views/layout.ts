@@ -9,6 +9,7 @@ export class Layout {
 
   render(): string {
     return `
+      <!DOCTYPE html>
       <html>
         <head>
           <title>${this.title}</title>
