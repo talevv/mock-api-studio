@@ -1,10 +1,6 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
-import { EndpointCreateView } from "../views/endpoint-create.view";
-import { EndpointShowView } from "../views/endpoint-show.view";
-import { EndpointUpdateView } from "../views/endpoint-update.view";
-import { EndpointsListView } from "../views/endpoints-list.view";
-import { Layout } from "../views/layout";
+import { mapMethodToColor } from "../helpers/helpers";
 
 export class EndpointController implements Controller {
   routing: Route[] = [
@@ -20,10 +16,17 @@ export class EndpointController implements Controller {
   ]
 
   index(req: any, res: any) {
-    const endpoints = EndpointModel.getAll();
-    const view = new EndpointsListView(endpoints);
-    const layout = new Layout('Mock API Studio - Endpoints', view.render());
-    res.send(layout.render());
+    const endpoints = EndpointModel.getAll().map((endpoint, index) => ({
+      ...endpoint,
+      bgClass: index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
+      methodColor: mapMethodToColor(endpoint.method),
+    }));
+
+    res.render('endpoints-list', {
+      title: 'Mock API Studio - Endpoints',
+      endpoints,
+      updateSuccess: false,
+    });
   }
 
   show(req: any, res: any) {
@@ -33,24 +36,35 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const view = new EndpointShowView(endpoint);
-    const layout = new Layout('Mock API Studio - Endpoint', view.render());
-    res.send(layout.render());
+
+    res.render('endpoint-show', {
+      title: 'Mock API Studio - Endpoint',
+      endpoint,
+      methodColor: mapMethodToColor(endpoint.method),
+    });
   }
   
   activate(req: any, res: any) {
     const { active } = req.body;
-    const activatedEndpoints =  EndpointModel.activate(Array.isArray(active) ? active : [active]);
-    const view = new EndpointsListView(activatedEndpoints, true);
-    const layout = new Layout('Mock API Studio - Endpoints', view.render());
-    res.send(layout.render());
+    const activeIds = active ? (Array.isArray(active) ? active : [active]) : [];
+    const activatedEndpoints = EndpointModel.activate(activeIds).map((endpoint, index) => ({
+      ...endpoint,
+      bgClass: index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
+      methodColor: mapMethodToColor(endpoint.method),
+    }));
+
+    res.render('endpoints-list', {
+      title: 'Mock API Studio - Endpoints',
+      endpoints: activatedEndpoints,
+      updateSuccess: true,
+    });
   }
 
   create(req: any, res: any) {
     console.log('Rendering create endpoint form');
-    const view = new EndpointCreateView();
-    const layout = new Layout('Mock API Studio - Create Endpoint', view.render());
-    res.send(layout.render());
+    res.render('endpoint-create', {
+      title: 'Mock API Studio - Create Endpoint',
+    });
   }
 
   store(req: any, res: any) {
@@ -78,9 +92,11 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const view = new EndpointUpdateView(endpoint);
-    const layout = new Layout('Mock API Studio - Update Endpoint', view.render());
-    res.send(layout.render());
+
+    res.render('endpoint-update', {
+      title: 'Mock API Studio - Update Endpoint',
+      endpoint,
+    });
   }
 
   update(req: any, res: any) {

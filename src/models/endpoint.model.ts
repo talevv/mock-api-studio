@@ -31,7 +31,7 @@ export class EndpointModel {
 
   static activate(ids: string[]): EndpointModel[] {
     const endpoints = memoryDb.activate(ids);
-    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder));
+    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder)).sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   save(): void {
