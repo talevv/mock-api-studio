@@ -4,6 +4,9 @@ import path from 'path';
 import { engine } from 'express-handlebars';
 import { EndpointController } from './controllers/endpoint.controller';
 import { registerEndpoints } from './routing';
+import { runMigrations } from './db/db-sqlite';
+
+runMigrations();
 
 const app = express();
 const port = 3000;

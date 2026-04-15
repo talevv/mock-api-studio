@@ -12,11 +12,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "better-sqlite3": "^12.9.0",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.3",
     "handlebars": "^4.7.9"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
     "@types/express": "^5.0.6",
     "@types/node": "^25.5.2",
     "nodemon": "^3.1.14",
