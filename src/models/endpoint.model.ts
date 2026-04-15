@@ -47,4 +47,14 @@ export class EndpointModel {
   delete(): void {
     memoryDb.delete(this.id);
   }
+
+  update(): void {
+    memoryDb.update(this.id, {
+      name: this.name,
+      body: this.body,
+      method: this.method,
+      active: this.active,
+      path: this.path
+    });
+  }
 }

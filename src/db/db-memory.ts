@@ -34,6 +34,15 @@ export class DbMemory {
   delete(id: string) {
     this.endpoints = this.endpoints.filter(endpoint => endpoint.id !== id);
   }
+
+  update(id: string, data: any) {
+    this.endpoints = this.endpoints.map(endpoint => {
+      if (endpoint.id === id) {
+        return { ...endpoint, ...data };
+      }
+      return endpoint;
+    });
+  }
 }
 
 export const memoryDb = new DbMemory();

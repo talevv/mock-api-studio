@@ -39,6 +39,9 @@ export class EndpointsListView {
             <input type="checkbox" name="active" value="${endpoint.id}" ${endpoint.active ? 'checked' : ''}>
           </td>
           <td class="p-2 border-b border-slate-200 ">
+            <a href="/endpoints/${endpoint.id}/edit" class="text-blue-600 hover:underline mr-4">
+              Edit
+            </a>
             <button type="submit" class="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700" formmethod="post" formaction="/endpoints/${endpoint.id}/delete">
               Delete
             </button>
