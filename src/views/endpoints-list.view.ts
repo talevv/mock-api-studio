@@ -39,6 +39,10 @@ export class EndpointsListView {
             <input type="checkbox" name="active" value="${endpoint.id}" ${endpoint.active ? 'checked' : ''}>
           </td>
           <td class="p-2 border-b border-slate-200 ">
+            <div class="inline-flex mr-4">
+                <button name="direction" name="direction" value="up" formmethod="post" formaction="/endpoints/${endpoint.id}/move">↑</button>
+                <button name="direction" name="direction" value="down" formmethod="post" formaction="/endpoints/${endpoint.id}/move">↓</button>
+            </div>
             <a href="/endpoints/${endpoint.id}/edit" class="text-blue-600 hover:underline mr-4">
               Edit
             </a>

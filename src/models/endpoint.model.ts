@@ -8,18 +8,20 @@ export class EndpointModel {
   method: string;
   body: string;
   active: boolean = false;
+  sortOrder: number = 0;
 
-  constructor(id: string, name: string, path: string, method: string, body: string, active: boolean = false) {
+  constructor(id: string, name: string, path: string, method: string, body: string, active: boolean = false, sortOrder: number = 0) {
     this.id = id;
     this.name = name;
     this.path = path;
     this.method = method;
     this.body = body;
     this.active = active;
+    this.sortOrder = sortOrder;
   }
 
   static getAll(): EndpointModel[] {
-    return memoryDb.getAll().map((row: any) => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
+    return memoryDb.getAll().map((row: any) => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder)).sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   static getById(id: string): EndpointModel | null {
@@ -29,7 +31,7 @@ export class EndpointModel {
 
   static activate(ids: string[]): EndpointModel[] {
     const endpoints = memoryDb.activate(ids);
-    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active));
+    return endpoints.map(row => new EndpointModel(row.id, row.name, row.path, row.method, row.body, row.active, row.sortOrder));
   }
 
   save(): void {
@@ -54,7 +56,8 @@ export class EndpointModel {
       body: this.body,
       method: this.method,
       active: this.active,
-      path: this.path
+      path: this.path,
+      sortOrder: this.sortOrder
     });
   }
 }

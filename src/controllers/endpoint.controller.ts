@@ -15,7 +15,8 @@ export class EndpointController implements Controller {
     { method: 'get', path: '/endpoints/:id', handler: this.show },
     { method: 'post', path: '/endpoints/:id/delete', handler: this.delete },
     { method: 'get', path: '/endpoints/:id/edit', handler: this.edit },
-    { method: 'post', path: '/endpoints/:id/update', handler: this.update}
+    { method: 'post', path: '/endpoints/:id/update', handler: this.update},
+    { method: 'post', path: '/endpoints/:id/move', handler: this.move }
   ]
 
   index(req: any, res: any) {
@@ -95,6 +96,27 @@ export class EndpointController implements Controller {
     endpoint.method = method;
     endpoint.body = body;
     endpoint.update();
+    res.redirect('/endpoints');
+  }
+
+  move(req: any, res: any) {
+    const { id } = req.params;
+    const { direction } = req.body;
+    const endpoints = EndpointModel.getAll();
+    const index = endpoints.findIndex(e => e.id === id);
+    if (index === -1) {
+      res.status(404).send('Endpoint not found');
+      return;
+    }
+    if (direction === 'up' && index > 0) {
+      [endpoints[index].sortOrder, endpoints[index - 1].sortOrder] = [endpoints[index - 1].sortOrder, endpoints[index].sortOrder];
+      endpoints[index].update();
+      endpoints[index - 1].update();
+    } else if (direction === 'down' && index < endpoints.length - 1) {
+      [endpoints[index].sortOrder, endpoints[index + 1].sortOrder] = [endpoints[index + 1].sortOrder, endpoints[index].sortOrder];
+      endpoints[index].update();
+      endpoints[index + 1].update();
+    }
     res.redirect('/endpoints');
   }
 }

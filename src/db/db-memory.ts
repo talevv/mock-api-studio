@@ -1,8 +1,8 @@
 const endpointsDbRows = [
-  { id: '1', name: 'Get Users', path: '/users', method: 'GET', body: '', active: true },
-  { id: '2', name: 'Create User', path: '/users', method: 'POST', body: '{"name": "John Doe"}', active: false },
-  { id: '3', name: 'Update User', path: '/users/:id', method: 'PUT', body: '{"name": "John Doe Updated"}', active: false },
-  { id: '4', name: 'Delete User', path: '/users/:id', method: 'DELETE', body: '', active: false },
+  { id: '1', name: 'Get Users', path: '/users', method: 'GET', body: '', active: true, sortOrder: 0 },
+  { id: '2', name: 'Create User', path: '/users', method: 'POST', body: '{"name": "John Doe"}', active: false, sortOrder: 1 },
+  { id: '3', name: 'Update User', path: '/users/:id', method: 'PUT', body: '{"name": "John Doe Updated"}', active: false, sortOrder: 2 },
+  { id: '4', name: 'Delete User', path: '/users/:id', method: 'DELETE', body: '', active: false, sortOrder: 3 },
 ];
 
 
