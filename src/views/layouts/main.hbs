@@ -5,15 +5,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body>
-    <nav class="bg-gray-800 pl-6 pr-6 py-4 pb-4">
+    <div class="bg-gray-800 pl-6 pr-6 py-4 pb-4">
       <div class="flex items-center justify-between mx-auto">
-        <a href="/endpoints" class="text-white text-lg font-semibold">Mock API Studio</a>
+        <div class="flex items-center space-x-4">
+          <a href="/endpoints" class="text-white text-lg font-semibold">Mock API Studio</a>
+          <nav>
+            <a href="/endpoints" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Endpoints</a>
+            <a href="/endpoints/create" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create Endpoint</a>
+          </nav>
+        </div>
         <div>
-          <a href="/endpoints" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Endpoints</a>
-          <a href="/endpoints/create" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Create Endpoint</a>
+          <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Run server
+          </button>
         </div>
       </div>
-    </nav>
+    </div>
     {{{body}}}
   </body>
 </html>
