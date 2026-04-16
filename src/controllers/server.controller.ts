@@ -27,14 +27,22 @@ export class ServerController implements Controller {
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-    app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const endpoint = endpoints.find(e => e.path === req.path && e.method.toLowerCase() === req.method.toLowerCase());
-      if (endpoint) {
-        // TODO add support for dynamic response based on request body in the future, for now we will return the static response defined in the endpoint
-        res.status(200).send(endpoint.body);
-      } else {
-        res.status(404).send('Endpoint not found');
+
+    const router = express.Router();
+
+    endpoints.forEach(endpoint => {
+      const method = endpoint.method.toLowerCase();
+      if (['get', 'post', 'put', 'delete', 'patch', 'options'].includes(method)) {
+        (router as any)[method](endpoint.path, (req: express.Request, res: express.Response) => {
+          // TODO add support for dynamic response based on request body in the future, for now we will return the static response defined in the endpoint
+          res.status(200).send(endpoint.body);
+        });
       }
+    });
+
+    app.use(router);
+    app.use((req: express.Request, res: express.Response) => {
+      res.status(404).send('Endpoint not found');
     });
 
     this.serverInstance = app.listen(port, () => {
