@@ -45,16 +45,28 @@
               >
             </td>
             <td class="p-2 border-b border-slate-200">
-              <form method="post" action="/endpoints/{{id}}/move" class="inline-flex">
-                <button name="direction" value="up">↑</button>
-                <button name="direction" value="down">↓</button>
-              </form>
-              <a href="/endpoints/{{id}}/edit" class="text-blue-600 hover:underline mr-4">
-                Edit
-              </a>
-              <button type="submit" class="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700" formmethod="post" formaction="/endpoints/{{id}}/delete">
-                Delete
-              </button>
+              <div class="flex space-x-4">
+                <form method="post" action="/endpoints/{{id}}/move" class="inline-flex">
+                  <button name="direction" value="up">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M10 17a.75.75 0 0 1-.75-.75V5.612L5.29 9.77a.75.75 0 0 1-1.08-1.04l5.25-5.5a.75.75 0 0 1 1.08 0l5.25 5.5a.75.75 0 1 1-1.08 1.04l-3.96-4.158V16.25A.75.75 0 0 1 10 17Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                  <button name="direction" value="down">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+                      <path fill-rule="evenodd" d="M10 3a.75.75 0 0 1 .75.75v10.638l3.96-4.158a.75.75 0 1 1 1.08 1.04l-5.25 5.5a.75.75 0 0 1-1.08 0l-5.25-5.5a.75.75 0 1 1 1.08-1.04l3.96 4.158V3.75A.75.75 0 0 1 10 3Z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </form>
+                <a href="/endpoints/{{id}}/edit" class="text-blue-600 hover:underline mr-4">
+                  Edit
+                </a>
+                <button type="submit" class="px-2 py-1 bg-red-600 text-white text-xs font-medium rounded-md hover:bg-red-700" formmethod="post" formaction="/endpoints/{{id}}/delete">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                    <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
             </td>
           </tr>
         {{/each}}
