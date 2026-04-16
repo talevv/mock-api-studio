@@ -7,7 +7,7 @@ export class EndpointController implements Controller {
     { method: 'get', path: '/endpoints', handler: this.index },
     { method: 'get', path: '/endpoints/create', handler: this.create },
     { method: 'post', path: '/endpoints/create', handler: this.store },
-    { method: 'post', path: '/endpoints/activate', handler: this.activate },
+    { method: 'post', path: '/endpoints/:id/toggle', handler: this.toggle },
     { method: 'get', path: '/endpoints/:id', handler: this.show },
     { method: 'post', path: '/endpoints/:id/delete', handler: this.delete },
     { method: 'get', path: '/endpoints/:id/edit', handler: this.edit },
@@ -44,20 +44,16 @@ export class EndpointController implements Controller {
     });
   }
   
-  activate(req: any, res: any) {
-    const { active } = req.body;
-    const activeIds = active ? (Array.isArray(active) ? active : [active]) : [];
-    const activatedEndpoints = EndpointModel.activate(activeIds).map((endpoint, index) => ({
-      ...endpoint,
-      bgClass: index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
-      methodColor: mapMethodToColor(endpoint.method),
-    }));
-
-    res.render('endpoints-list', {
-      title: 'Mock API Studio - Endpoints',
-      endpoints: activatedEndpoints,
-      updateSuccess: true,
-    });
+  toggle(req: any, res: any) {
+    const { id } = req.params;
+    const endpoint = EndpointModel.getById(id);
+    if (!endpoint) {
+      res.status(404).send('Endpoint not found');
+      return;
+    }
+    endpoint.active = !endpoint.active;
+    endpoint.update();
+    res.status(200).send('Endpoint updated successfully');
   }
 
   create(req: any, res: any) {
