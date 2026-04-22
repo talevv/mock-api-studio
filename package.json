@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "better-sqlite3": "^12.9.0",
+    "env-paths": "^4.0.0",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.3",
     "handlebars": "^4.7.9"

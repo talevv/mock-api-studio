@@ -1,7 +1,22 @@
 import Database from 'better-sqlite3';
+import envPaths from 'env-paths';
+import path from 'path';
+import fs from 'fs';
 import { migrations } from './migrations';
 
-export const db = new Database('mock-api.db', { verbose: console.log });
+const getDbPath = () => {
+  const paths = envPaths('mock-api');
+
+  if (!fs.existsSync(paths.data)) {
+    fs.mkdirSync(paths.data, { recursive: true });
+  }
+  
+  console.log(`Using database path: ${paths.data}`);
+  return path.join(paths.data, 'mock-api.db');
+};
+
+
+export const db = new Database(getDbPath(), { verbose: console.log });
 
 const createMigrationsTable = `CREATE TABLE IF NOT EXISTS migrations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
