@@ -1,4 +1,4 @@
-import { EndpointModel } from "../models/endpoint.model";
+import { Endpoint } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
 import { mapMethodToColor } from "../helpers/helpers";
 import { logger } from "../logger";
@@ -16,8 +16,9 @@ export class EndpointController implements Controller {
     { method: 'post', path: '/endpoints/:id/move', handler: this.move }
   ]
 
-  index(req: any, res: any) {
-    const endpoints = EndpointModel.getAll().map((endpoint, index) => ({
+  async index(req: any, res: any) {
+    const endpoints = await Endpoint.find({ order: { sortOrder: 'ASC' } });
+    const endpointsWithStyles = endpoints.map((endpoint, index) => ({
       ...endpoint,
       bgClass: index % 2 === 0 ? 'bg-white' : 'bg-gray-50',
       methodColor: mapMethodToColor(endpoint.method),
@@ -25,14 +26,15 @@ export class EndpointController implements Controller {
 
     res.render('endpoints-list', {
       title: 'Mock API Studio - Endpoints',
-      endpoints,
+      endpoints: endpointsWithStyles,
       updateSuccess: false,
     });
   }
 
-  show(req: any, res: any) {
+  async show(req: any, res: any) {
     const { id } = req.params;
-    const endpoint = EndpointModel.getById(id);
+    const endpoint = await Endpoint.findOneBy({ id: parseInt(id) });
+
     if (!endpoint) {
       logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
@@ -46,16 +48,16 @@ export class EndpointController implements Controller {
     });
   }
   
-  toggle(req: any, res: any) {
+  async toggle(req: any, res: any) {
     const { id } = req.params;
-    const endpoint = EndpointModel.getById(id);
+    const endpoint = await Endpoint.findOneBy({ id: parseInt(id) });
     if (!endpoint) {
       logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
     endpoint.active = !endpoint.active;
-    endpoint.update();
+    await endpoint.save();
     res.status(200).send('Endpoint updated successfully');
   }
 
@@ -65,28 +67,34 @@ export class EndpointController implements Controller {
     });
   }
 
-  store(req: any, res: any) {
+  async store(req: any, res: any) {
     const { name, path, method, body } = req.body;
-    const endpoint = new EndpointModel('', name, path, method, body);
-    endpoint.save();
+    const endpoint = new Endpoint();
+    endpoint.name = name;
+    endpoint.path = path;
+    endpoint.method = method;
+    endpoint.body = body;
+    endpoint.sortOrder = (await Endpoint.count()) + 1;
+    await endpoint.save();
     res.redirect('/endpoints');
   }
 
-  delete(req: any, res: any) {
+  async delete(req: any, res: any) {
     const { id } = req.params;
-    const endpoint = EndpointModel.getById(id);
+    const endpoint = await Endpoint.findOneBy({ id: parseInt(id) });
     if (!endpoint) {
       logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
-    endpoint.delete();
+    await endpoint.remove();
     res.redirect('/endpoints');
   }
 
-  edit(req: any, res: any) {
+  async edit(req: any, res: any) {
     const { id } = req.params;
-    const endpoint = EndpointModel.getById(id);
+    const endpoint = await Endpoint.findOneBy({ id: parseInt(id) });
+
     if (!endpoint) {
       logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
@@ -99,9 +107,9 @@ export class EndpointController implements Controller {
     });
   }
 
-  update(req: any, res: any) {
+  async update(req: any, res: any) {
     const { id } = req.params;
-    const endpoint = EndpointModel.getById(id);
+    const endpoint = await Endpoint.findOneBy({ id: parseInt(id) });
     if (!endpoint) {
       logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
@@ -112,14 +120,14 @@ export class EndpointController implements Controller {
     endpoint.path = path;
     endpoint.method = method;
     endpoint.body = body;
-    endpoint.update();
+    await endpoint.save();
     res.redirect('/endpoints');
   }
 
-  move(req: any, res: any) {
+  async move(req: any, res: any) {
     const { id } = req.params;
     const { direction } = req.body;
-    const endpoints = EndpointModel.getAll();
+    const endpoints = await Endpoint.find({ order: { sortOrder: 'ASC' } })
     const index = endpoints.findIndex(e => e.id?.toString() === id);
     if (index === -1) {
       logger.error(`Endpoint with id ${id} not found`);
@@ -128,12 +136,12 @@ export class EndpointController implements Controller {
     }
     if (direction === 'up' && index > 0) {
       [endpoints[index].sortOrder, endpoints[index - 1].sortOrder] = [endpoints[index - 1].sortOrder, endpoints[index].sortOrder];
-      endpoints[index].update();
-      endpoints[index - 1].update();
+      await endpoints[index].save();
+      await endpoints[index - 1].save();
     } else if (direction === 'down' && index < endpoints.length - 1) {
       [endpoints[index].sortOrder, endpoints[index + 1].sortOrder] = [endpoints[index + 1].sortOrder, endpoints[index].sortOrder];
-      endpoints[index].update();
-      endpoints[index + 1].update();
+      await endpoints[index].save();
+      await endpoints[index + 1].save();
     }
     res.redirect('/endpoints');
   }

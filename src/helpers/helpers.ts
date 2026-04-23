@@ -1,3 +1,8 @@
+import envPaths from "env-paths";
+import path from "path";
+import fs from "fs";
+import { logger } from "../logger";
+
 export const mapMethodToColor = (method: string): string => {
   switch (method.toUpperCase()) {
     case 'GET':
@@ -13,6 +18,19 @@ export const mapMethodToColor = (method: string): string => {
     default:
       return 'bg-gray-100 text-gray-800';
   }
+};
+
+const dbFileName = "mock-api.db";
+
+export const getDbPath = () => {
+  const paths = envPaths('mock-api');
+
+  if (!fs.existsSync(paths.data)) {
+    fs.mkdirSync(paths.data, { recursive: true });
+  }
+  
+  logger.info(`Using database path: ${paths.data}`);
+  return path.join(paths.data, dbFileName);
 };
 
 export const findFreePort = (startPort: number = 3000, attempts: number = 10): Promise<number> => {

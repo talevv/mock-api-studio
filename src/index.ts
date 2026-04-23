@@ -1,15 +1,14 @@
 
 import express from 'express';
 import path from 'path';
+import "reflect-metadata";
 import { engine } from 'express-handlebars';
 import { EndpointController } from './controllers/endpoint.controller';
 import { ServerController } from './controllers/server.controller';
 import { registerEndpoints } from './routing';
-import { runMigrations } from './db/db-sqlite';
 import { logger } from './logger';
 import { findFreePort } from './helpers/helpers';
-
-runMigrations();
+import { AppDataSource } from './db/data-source';
 
 const app = express();
 const defaultPort = 3000;
@@ -36,10 +35,18 @@ app.get('/', (req, res) => {
   res.redirect('/endpoints');
 });
 
-findFreePort(defaultPort).then((port) => {
-  app.listen(port, () => {
-    logger.info(`Server is running at http://localhost:${port}`);
-  });
-}).catch((err) => {
-  logger.error('Failed to find a free port:', err);
-});
+const startServer = async () => {
+  try {
+    await AppDataSource.initialize();
+    await AppDataSource.runMigrations();
+    const port = await findFreePort(defaultPort);
+    app.listen(port, () => {
+      logger.info(`Server is running at http://localhost:${port}`);
+    });
+  } catch (err: any) {
+    logger.error('Failed to find a free port:', err);
+  }
+};
+
+startServer();
+

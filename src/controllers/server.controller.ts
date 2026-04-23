@@ -1,16 +1,8 @@
-import { db } from "../db/db-sqlite";
+import { Endpoint } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
 import express from 'express';
 import { Server } from "node:http";
 import { logger } from "../logger";
-
-interface Endpoint {
-  id: string;
-  name: string;
-  path: string;
-  method: string;
-  body: string;
-}
 
 export class ServerController implements Controller {
   private isServerRunning = false;
@@ -22,9 +14,9 @@ export class ServerController implements Controller {
     { method: 'post', path: '/server/stop', handler: this.stop }
   ]
 
-  private runServer(port: number) {
+  private async runServer(port: number) {
     const app = express();
-    const endpoints: Endpoint[] = db.prepare('SELECT name, path, method, body FROM endpoints WHERE active = 1 ORDER BY sort_order ASC').all() as Endpoint[];
+    const endpoints: Endpoint[] = await Endpoint.find({ where: { active: true }, order: { sortOrder: 'ASC' } });
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));

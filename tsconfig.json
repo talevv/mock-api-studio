@@ -4,6 +4,9 @@
     "module": "commonjs",
     "rootDir": "src",
     "outDir": "dist",
-    "strict": true
-  }
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+  },
 }
