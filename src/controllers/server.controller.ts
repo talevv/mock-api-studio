@@ -11,8 +11,56 @@ export class ServerController implements Controller {
 
   routing: Route[] = [
     { method: 'post', path: '/server/run', handler: this.run },
-    { method: 'post', path: '/server/stop', handler: this.stop }
+    { method: 'post', path: '/server/stop', handler: this.stop },
+    { method: 'get', path: '/server', handler: this.index },
   ]
+
+  index(req: any, res: any) {
+    if (!this.isServerRunning || !this.serverInstance) {
+      res.render('server-stopped', {
+      layout: false
+      });
+    } else {
+      res.render('server-running', {
+        layout: false
+      });
+    }
+  }
+
+  run(req: any, res: any) {
+    // TODO add support for custom port in the future, for now we will use the default port
+    const port = this.defaultPort;
+
+    if (this.isServerRunning) {
+      logger.warn('Attempted to start server, but it is already running');
+      res.status(400).send('Server is already running');
+      return;
+    }
+
+    this.isServerRunning = true;
+
+    this.runServer(port);
+
+    res.render('server-running', {
+      layout: false
+    });
+  }
+
+  stop(req: any, res: any) {
+    if (!this.isServerRunning) {
+      logger.warn('Attempted to stop server, but it is not running');
+      res.status(400).send('Server is not running');
+      return;
+    }
+
+    this.isServerRunning = false;
+
+    this.stopServer();
+
+    res.render('server-stopped', {
+      layout: false
+    });
+  }
 
   private async runServer(port: number) {
     const app = express();
@@ -50,40 +98,5 @@ export class ServerController implements Controller {
       });
       this.serverInstance = null;
     }
-  }
-
-  run(req: any, res: any) {
-    // TODO add support for custom port in the future, for now we will use the default port
-    const port = this.defaultPort;
-
-    if (this.isServerRunning) {
-      logger.warn('Attempted to start server, but it is already running');
-      res.status(400).send('Server is already running');
-      return;
-    }
-
-    this.isServerRunning = true;
-
-    this.runServer(port);
-
-    res.render('server-running', {
-      layout: false
-    });
-  }
-
-  stop(req: any, res: any) {
-    if (!this.isServerRunning) {
-      logger.warn('Attempted to stop server, but it is not running');
-      res.status(400).send('Server is not running');
-      return;
-    }
-
-    this.isServerRunning = false;
-
-    this.stopServer();
-
-    res.render('server-stopped', {
-      layout: false
-    });
   }
 }
