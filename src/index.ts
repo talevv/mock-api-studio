@@ -7,11 +7,12 @@ import { ServerController } from './controllers/server.controller';
 import { registerEndpoints } from './routing';
 import { runMigrations } from './db/db-sqlite';
 import { logger } from './logger';
+import { findFreePort } from './helpers/helpers';
 
 runMigrations();
 
 const app = express();
-const port = 3000;
+const defaultPort = 3000;
 const endpointController = new EndpointController();
 const serverController = new ServerController();
 
@@ -35,6 +36,10 @@ app.get('/', (req, res) => {
   res.redirect('/endpoints');
 });
 
-app.listen(port, () => {
-  logger.info(`Server is running at http://localhost:${port}`);
+findFreePort(defaultPort).then((port) => {
+  app.listen(port, () => {
+    logger.info(`Server is running at http://localhost:${port}`);
+  });
+}).catch((err) => {
+  logger.error('Failed to find a free port:', err);
 });

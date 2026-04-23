@@ -14,3 +14,27 @@ export const mapMethodToColor = (method: string): string => {
       return 'bg-gray-100 text-gray-800';
   }
 };
+
+export const findFreePort = (startPort: number = 3000, attempts: number = 10): Promise<number> => {
+  const checkPort = (port: number): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const server = require('net').createServer();
+      server.once('error', () => resolve(false));
+      server.once('listening', () => {
+        server.close(() => resolve(true));
+      });
+      server.listen(port);
+    });
+  };
+
+  return new Promise(async (resolve, reject) => {
+    for (let i = 0; i < attempts; i++) {
+      const port = startPort + i;
+      if (await checkPort(port)) {
+        resolve(port);
+        return;
+      }
+    }
+    reject(new Error(`No free port found in range ${startPort}-${startPort + attempts - 1}`));
+  });
+};
