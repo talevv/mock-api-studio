@@ -31,6 +31,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 registerEndpoints([endpointController, serverController], app);
 
+app.get('/', (req, res) => {
+  res.redirect('/endpoints');
+});
+
 app.listen(port, () => {
   logger.info(`Server is running at http://localhost:${port}`);
 });
