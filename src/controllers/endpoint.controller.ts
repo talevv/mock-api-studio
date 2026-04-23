@@ -1,6 +1,7 @@
 import { EndpointModel } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
 import { mapMethodToColor } from "../helpers/helpers";
+import { logger } from "../logger";
 
 export class EndpointController implements Controller {
   routing: Route[] = [
@@ -33,6 +34,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const endpoint = EndpointModel.getById(id);
     if (!endpoint) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
@@ -48,6 +50,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const endpoint = EndpointModel.getById(id);
     if (!endpoint) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
@@ -57,7 +60,6 @@ export class EndpointController implements Controller {
   }
 
   create(req: any, res: any) {
-    console.log('Rendering create endpoint form');
     res.render('endpoint-create', {
       title: 'Mock API Studio - Create Endpoint',
     });
@@ -74,6 +76,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const endpoint = EndpointModel.getById(id);
     if (!endpoint) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
@@ -85,6 +88,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const endpoint = EndpointModel.getById(id);
     if (!endpoint) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
@@ -99,6 +103,7 @@ export class EndpointController implements Controller {
     const { id } = req.params;
     const endpoint = EndpointModel.getById(id);
     if (!endpoint) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }
@@ -117,6 +122,7 @@ export class EndpointController implements Controller {
     const endpoints = EndpointModel.getAll();
     const index = endpoints.findIndex(e => e.id?.toString() === id);
     if (index === -1) {
+      logger.error(`Endpoint with id ${id} not found`);
       res.status(404).send('Endpoint not found');
       return;
     }

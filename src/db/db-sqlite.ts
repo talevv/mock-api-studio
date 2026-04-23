@@ -3,6 +3,7 @@ import envPaths from 'env-paths';
 import path from 'path';
 import fs from 'fs';
 import { migrations } from './migrations';
+import { logger } from '../logger';
 
 const getDbPath = () => {
   const paths = envPaths('mock-api');
@@ -11,12 +12,12 @@ const getDbPath = () => {
     fs.mkdirSync(paths.data, { recursive: true });
   }
   
-  console.log(`Using database path: ${paths.data}`);
+  logger.info(`Using database path: ${paths.data}`);
   return path.join(paths.data, 'mock-api.db');
 };
 
 
-export const db = new Database(getDbPath(), { verbose: console.log });
+export const db = new Database(getDbPath(), { verbose: logger.info.bind(logger) });
 
 const createMigrationsTable = `CREATE TABLE IF NOT EXISTS migrations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -31,7 +32,7 @@ export function runMigrations() {
   
   for (const migration of migrations) {
     if (!appliedMigrations.includes(migration.name)) {
-      console.log(`Running migration: ${migration.name}`);
+      logger.info(`Running migration: ${migration.name}`);
       db.exec(migration.sql);
       db.prepare('INSERT INTO migrations (name) VALUES (?)').run(migration.name);
     }

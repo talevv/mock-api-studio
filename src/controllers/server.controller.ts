@@ -2,6 +2,7 @@ import { db } from "../db/db-sqlite";
 import { Controller, Route } from "../types";
 import express from 'express';
 import { Server } from "node:http";
+import { logger } from "../logger";
 
 interface Endpoint {
   id: string;
@@ -46,14 +47,14 @@ export class ServerController implements Controller {
     });
 
     this.serverInstance = app.listen(port, () => {
-      console.log(`Mock API server is running on port ${port}`);
+      logger.info(`Mock API server is running on port ${port}`);
     });
   }
 
   private stopServer() {
     if (this.serverInstance) {
       this.serverInstance.close(() => {
-        console.log('Mock API server has been stopped');
+        logger.info('Mock API server has been stopped');
       });
       this.serverInstance = null;
     }
@@ -64,6 +65,7 @@ export class ServerController implements Controller {
     const port = this.defaultPort;
 
     if (this.isServerRunning) {
+      logger.warn('Attempted to start server, but it is already running');
       res.status(400).send('Server is already running');
       return;
     }
@@ -79,6 +81,7 @@ export class ServerController implements Controller {
 
   stop(req: any, res: any) {
     if (!this.isServerRunning) {
+      logger.warn('Attempted to stop server, but it is not running');
       res.status(400).send('Server is not running');
       return;
     }

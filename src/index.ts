@@ -6,6 +6,7 @@ import { EndpointController } from './controllers/endpoint.controller';
 import { ServerController } from './controllers/server.controller';
 import { registerEndpoints } from './routing';
 import { runMigrations } from './db/db-sqlite';
+import { logger } from './logger';
 
 runMigrations();
 
@@ -31,5 +32,5 @@ app.use(express.urlencoded({ extended: true }));
 registerEndpoints([endpointController, serverController], app);
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  logger.info(`Server is running at http://localhost:${port}`);
 });
