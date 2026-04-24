@@ -14,6 +14,9 @@ export class Endpoint extends BaseEntity {
   @Column()
   method: string;
 
+  @Column({default: 200})
+  status: number;
+
   @Column('text')
   body: string;
 
