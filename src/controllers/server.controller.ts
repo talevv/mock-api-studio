@@ -3,9 +3,11 @@ import { Controller, Route } from "../types";
 import express from 'express';
 import { Server } from "node:http";
 import { logger } from "../logger";
+import { ServerState, ServerStatus } from "../shared/server-state";
 
 export class ServerController implements Controller {
-  private isServerRunning = false;
+  constructor(private readonly serverState: ServerState) {}
+
   private defaultPort = 4000;
   private serverInstance: Server | null = null;
 
@@ -16,7 +18,7 @@ export class ServerController implements Controller {
   ]
 
   index(req: any, res: any) {
-    if (!this.isServerRunning || !this.serverInstance) {
+    if (this.serverState.getStatus() !== ServerStatus.RUNNING || !this.serverInstance) {
       res.render('server-stopped', {
       layout: false
       });
@@ -31,13 +33,13 @@ export class ServerController implements Controller {
     // TODO add support for custom port in the future, for now we will use the default port
     const port = this.defaultPort;
 
-    if (this.isServerRunning) {
+    if (this.serverState.getStatus() === ServerStatus.RUNNING) {
       logger.warn('Attempted to start server, but it is already running');
       res.status(400).send('Server is already running');
       return;
     }
 
-    this.isServerRunning = true;
+    this.serverState.start();
 
     this.runServer(port);
 
@@ -47,13 +49,13 @@ export class ServerController implements Controller {
   }
 
   stop(req: any, res: any) {
-    if (!this.isServerRunning) {
+    if (this.serverState.getStatus() !== ServerStatus.RUNNING) {
       logger.warn('Attempted to stop server, but it is not running');
       res.status(400).send('Server is not running');
       return;
     }
 
-    this.isServerRunning = false;
+    this.serverState.stop();
 
     this.stopServer();
 

@@ -2,8 +2,11 @@ import { Endpoint } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
 import { mapMethodToColor } from "../helpers/helpers";
 import { logger } from "../logger";
+import { ServerState, ServerStatus } from "../shared/server-state";
 
 export class EndpointController implements Controller {
+  constructor(private readonly serverState: ServerState) {}
+
   routing: Route[] = [
     { method: 'get', path: '/endpoints', handler: this.index },
     { method: 'get', path: '/endpoints/create', handler: this.create },
@@ -28,6 +31,7 @@ export class EndpointController implements Controller {
       title: 'Mock API Studio - Endpoints',
       endpoints: endpointsWithStyles,
       updateSuccess: false,
+      serverRunning: this.serverState.getStatus() === ServerStatus.RUNNING,
     });
   }
 

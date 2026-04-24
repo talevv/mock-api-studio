@@ -9,11 +9,13 @@ import { registerEndpoints } from './routing';
 import { logger } from './logger';
 import { findFreePort } from './helpers/helpers';
 import { AppDataSource } from './db/data-source';
+import {ServerState} from "./shared/server-state";
 
 const app = express();
 const defaultPort = 3000;
-const endpointController = new EndpointController();
-const serverController = new ServerController();
+const serverState = new ServerState();
+const endpointController = new EndpointController(serverState);
+const serverController = new ServerController(serverState);
 
 app.engine('hbs', engine({
   extname: '.hbs',
