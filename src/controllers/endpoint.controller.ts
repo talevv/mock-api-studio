@@ -72,11 +72,12 @@ export class EndpointController implements Controller {
   }
 
   async store(req: any, res: any) {
-    const { name, path, method, body } = req.body;
+    const { name, path, method, body, status } = req.body;
     const endpoint = new Endpoint();
     endpoint.name = name;
     endpoint.path = path;
     endpoint.method = method;
+    endpoint.status = status ? parseInt(status) : 200;
     endpoint.body = body;
     endpoint.sortOrder = (await Endpoint.count()) + 1;
     await endpoint.save();
@@ -119,11 +120,12 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const { name, path, method, body } = req.body;
+    const { name, path, method, body, status } = req.body;
     endpoint.name = name;
     endpoint.path = path;
     endpoint.method = method;
     endpoint.body = body;
+    endpoint.status = status ? parseInt(status) : 200;
     await endpoint.save();
     res.redirect('/endpoints');
   }

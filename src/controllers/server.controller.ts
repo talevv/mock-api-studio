@@ -77,8 +77,7 @@ export class ServerController implements Controller {
       const method = endpoint.method.toLowerCase();
       if (['get', 'post', 'put', 'delete', 'patch', 'options'].includes(method)) {
         (router as any)[method](endpoint.path, (req: express.Request, res: express.Response) => {
-          // TODO add support for dynamic response based on request body in the future, for now we will return the static response defined in the endpoint
-          res.status(200).send(endpoint.body);
+          res.status(endpoint.status).send(endpoint.body);
         });
       }
     });
