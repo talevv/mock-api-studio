@@ -77,6 +77,10 @@ export class ServerController implements Controller {
       const method = endpoint.method.toLowerCase();
       if (['get', 'post', 'put', 'delete', 'patch', 'options'].includes(method)) {
         (router as any)[method](endpoint.path, (req: express.Request, res: express.Response) => {
+          const headers: Record<string, string> = endpoint.headers ? JSON.parse(endpoint.headers) : {};
+          Object.entries(headers).forEach(([name, value]) => {
+            res.setHeader(name, value);
+          });
           res.status(endpoint.status).send(endpoint.body);
         });
       }
