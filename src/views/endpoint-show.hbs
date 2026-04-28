@@ -28,6 +28,14 @@
         <dt class="text-sm font-medium text-slate-500">Active</dt>
         <dd class="mt-1 text-sm text-slate-900">{{#if endpoint.active}}Yes{{else}}No{{/if}}</dd>
       </div>
+      {{#if endpoint.headers}}
+        <div class="mt-4">
+          <dt class="text-sm font-medium text-slate-500">Headers</dt>
+          <dd class="mt-1 text-sm text-slate-900">
+            <pre class="bg-gray-100 p-2 rounded-md overflow-x-auto"><code>{{endpoint.headers}}</code></pre>
+          </dd>
+        </div>
+      {{/if}}
     </dl>
   </div>
 </section>

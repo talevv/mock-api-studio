@@ -1,0 +1,5 @@
+<div class="header-row flex space-x-1 mt-1">
+  <input type="text" name="header_name[]" placeholder="X-Custom-Header" class="border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2" value="{{this.name}}">
+  <input type="text" name="header_value[]" placeholder="value" class="border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2" value="{{this.value}}">
+  <button hx-delete="/endpoints/header-row/delete" hx-target="closest .header-row" hx-swap="delete" type="button">✕</button>
+</div>

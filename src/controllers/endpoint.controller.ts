@@ -1,6 +1,6 @@
 import { Endpoint } from "../models/endpoint.model";
 import { Controller, Route } from "../types";
-import { mapMethodToColor } from "../helpers/helpers";
+import { mapMethodToColor, zip } from "../helpers/helpers";
 import { logger } from "../logger";
 import { ServerState, ServerStatus } from "../shared/server-state";
 
@@ -16,7 +16,9 @@ export class EndpointController implements Controller {
     { method: 'post', path: '/endpoints/:id/delete', handler: this.delete },
     { method: 'get', path: '/endpoints/:id/edit', handler: this.edit },
     { method: 'post', path: '/endpoints/:id/update', handler: this.update},
-    { method: 'post', path: '/endpoints/:id/move', handler: this.move }
+    { method: 'post', path: '/endpoints/:id/move', handler: this.move },
+    { method: 'delete', path: '/endpoints/header-row/delete', handler: this.removeHeaderRow },
+    { method: 'post', path: '/endpoints/header-row/create', handler: this.addHeaderRow },
   ]
 
   async index(req: any, res: any) {
@@ -72,7 +74,7 @@ export class EndpointController implements Controller {
   }
 
   async store(req: any, res: any) {
-    const { name, path, method, body, status } = req.body;
+    const { name, path, method, body, status, header_name, header_value } = req.body;
     const endpoint = new Endpoint();
     endpoint.name = name;
     endpoint.path = path;
@@ -80,6 +82,13 @@ export class EndpointController implements Controller {
     endpoint.status = status ? parseInt(status) : 200;
     endpoint.body = body;
     endpoint.sortOrder = (await Endpoint.count()) + 1;
+    // zip header_name and header_value into an object and save as json string in headers column
+    if (header_name && header_value && Array.isArray(header_name) && Array.isArray(header_value)) {
+      const headers: Record<string, string> = zip(header_name, header_value);
+      endpoint.headers = JSON.stringify(headers);
+    } else {
+      endpoint.headers = '{}';
+    }
     await endpoint.save();
     res.redirect('/endpoints');
   }
@@ -106,9 +115,13 @@ export class EndpointController implements Controller {
       return;
     }
 
+    const headers = endpoint.headers ? JSON.parse(endpoint.headers) : {};
+    const headersArray = Object.entries(headers).map(([name, value]) => ({ name, value }));
+
     res.render('endpoint-update', {
       title: 'Mock API Studio - Update Endpoint',
       endpoint,
+      headers: headersArray,
     });
   }
 
@@ -120,12 +133,19 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const { name, path, method, body, status } = req.body;
+    const { name, path, method, body, status, header_name, header_value } = req.body;
     endpoint.name = name;
     endpoint.path = path;
     endpoint.method = method;
     endpoint.body = body;
     endpoint.status = status ? parseInt(status) : 200;
+    // zip header_name and header_value into an object and save as json string in headers column
+    if (header_name && header_value && Array.isArray(header_name) && Array.isArray(header_value)) {
+      const headers: Record<string, string> = zip(header_name, header_value);
+      endpoint.headers = JSON.stringify(headers);
+    } else {
+      endpoint.headers = '{}';
+    }
     await endpoint.save();
     res.redirect('/endpoints');
   }
@@ -150,5 +170,15 @@ export class EndpointController implements Controller {
       await endpoints[index + 1].save();
     }
     res.redirect('/endpoints');
+  }
+
+  removeHeaderRow(req: any, res: any) {
+    res.status(200).send('Header row deleted successfully');
+  }
+
+  addHeaderRow(req: any, res: any) {
+    res.render('header-row', {
+      layout: false,
+    });
   }
 }

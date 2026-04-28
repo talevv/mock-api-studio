@@ -23,6 +23,9 @@ export class Endpoint extends BaseEntity {
   @Column({ default: false })
   active: boolean;
 
+  @Column('text', { nullable: true })
+  headers: string;
+
   @Column({ name: 'sort_order', default: 0 })
   sortOrder: number;
 }
