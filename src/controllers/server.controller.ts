@@ -77,10 +77,25 @@ export class ServerController implements Controller {
       const method = endpoint.method.toLowerCase();
       if (['get', 'post', 'put', 'delete', 'patch', 'options'].includes(method)) {
         (router as any)[method](endpoint.path, (req: express.Request, res: express.Response) => {
-          const headers: Record<string, string> = endpoint.headers ? JSON.parse(endpoint.headers) : {};
+          const headers: Record<string, string> = (() => {
+            try {
+              return endpoint.headers ? JSON.parse(endpoint.headers) : {};
+            } catch {
+              return {};
+            }
+          })();
           Object.entries(headers).forEach(([name, value]) => {
             res.setHeader(name, value);
           });
+
+          const hasContentType = Object.keys(headers)
+            .some(k => k.toLowerCase() === 'content-type');
+
+          // If the body looks like JSON and no Content-Type header is set, default to application/json
+          if (!hasContentType && endpoint.body?.trim().startsWith('{')) {
+            res.setHeader('Content-Type', 'application/json');
+          }
+
           res.status(endpoint.status).send(endpoint.body);
         });
       }
