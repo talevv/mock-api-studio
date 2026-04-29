@@ -2,6 +2,7 @@
 import express from 'express';
 import path from 'path';
 import "reflect-metadata";
+import open from "open";
 import { engine } from 'express-handlebars';
 import { EndpointController } from './controllers/endpoint.controller';
 import { ServerController } from './controllers/server.controller';
@@ -13,6 +14,7 @@ import {ServerState} from "./shared/server-state";
 
 interface StartServerOptions {
   port?: number;
+  open?: boolean;
 }
 
 export const startServer = async (options?: StartServerOptions) => {
@@ -51,6 +53,10 @@ export const startServer = async (options?: StartServerOptions) => {
     app.listen(port, () => {
       logger.info(`Server is running at http://localhost:${port}`);
     });
+    
+    if (options?.open) {
+      await open(`http://localhost:${port}`);
+    }
   } catch (err: any) {
     logger.error('Failed to find a free port:', err);
   }
