@@ -4,10 +4,6 @@
       {{#each headers}}
         {{> header-row}}
       {{/each}}
-      {{#unless headers}}
-        <p class="text-sm text-slate-500 mt-1">No headers defined. Add some using the button below.</p>
-      {{/unless}}
-    
   </div>
   <button
     hx-post="/endpoints/header-row/create"
