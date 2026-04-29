@@ -1,6 +1,6 @@
 <section class="p-6 mx-auto max-w-4xl">
   {{> go-back}}
-  <h1 class="text-2xl font-semibold text-slate-900">Update Endpoint</h1>
+  <h1 class="text-2xl font-semibold text-slate-900">Edit Endpoint</h1>
   <form method="POST" action="/endpoints/{{endpoint.id}}/update" class="mt-4 space-y-4">
     <div>
       <label for="name" class="block text-sm font-medium text-slate-700">Name</label>
@@ -31,7 +31,7 @@
       {{> headers}}
     </div>
     <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-      Update Endpoint
+      Save Changes
     </button>
   </form>
 </section>
