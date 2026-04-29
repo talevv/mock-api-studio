@@ -7,37 +7,42 @@ A GUI-based utility for creating, managing, and running mock APIs. Design realis
 🚧 **In Progress** – Core functionality is under active development.
 
 ## Installation & Usage
-
-> Available globally soon. Currently for development only.
-
-The utility starts a local Node server with a web-based GUI where you can create and manage your mock API.
-
+ 
+> **Note:** npm package coming soon. Currently available via local development only.
+ 
+The app starts a local Node server with a web-based GUI where you can create and manage your mock API endpoints.
+ 
+### Options
+ 
+```
+-p, --port <number>    Port to run the studio on (default: 3000)
+```
+ 
 ### Local Development
-
-**Prerequisites:** Node.js v16+ and npm
-
+ 
+**Prerequisites:** Node.js v20+ and npm
+ 
 **Setup:**
-
+ 
 ```bash
-git clone <repository>
+git clone https://github.com/talevv/mock-api-studio
 cd mock-api-studio
 npm install
 ```
-
-**Run Development Server:**
-
+ 
+**Run development server:**
+ 
 ```bash
 npm run dev
 ```
-
-The development server starts on `http://localhost:3000` with hot-reload enabled via nodemon and ts-node.
-
-**Build for Production:**
-
+ 
+**Build:**
+ 
 ```bash
 npm run build
 npm start
 ```
+
 
 ## Features
 
