@@ -47,6 +47,7 @@ export const findFreePort = (startPort: number = 3000, attempts: number = 10): P
 
   return new Promise(async (resolve, reject) => {
     for (let i = 0; i < attempts; i++) {
+      logger.info(`Checking port ${startPort + i}...`);
       const port = startPort + i;
       if (await checkPort(port)) {
         resolve(port);
