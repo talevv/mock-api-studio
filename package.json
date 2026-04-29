@@ -1,6 +1,6 @@
 {
   "name": "mock-api-studio",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "bin": {
     "mock-api-studio": "./dist/cli.js"
@@ -16,7 +16,14 @@
     "start": "node dist/cli.js",
     "typeorm": "typeorm-ts-node-commonjs"
   },
-  "keywords": ["mock", "api", "rest", "testing", "developer-tools", "cli"],
+  "keywords": [
+    "mock",
+    "api",
+    "rest",
+    "testing",
+    "developer-tools",
+    "cli"
+  ],
   "author": "Tadeusz Lewandowski (Talevv) <talevv@proton.me> (https://github.com/talevv)",
   "homepage": "https://github.com/talevv/mock-api-studio#readme",
   "license": "MIT",
