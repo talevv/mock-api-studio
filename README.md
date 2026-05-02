@@ -15,7 +15,11 @@ The app starts a local Node server with a web-based GUI where you can create and
 ### Options
  
 ```
--p, --port <number>    Port to run the studio on (default: 3000)
+Options:
+  -p, --port <port>         Port to run the server on (default: "3000")
+  -m, --mock-port <number>  port for the mock server (default: "4000")
+  --no-open                 Do not automatically open the browser
+  -h, --help                display help for command
 ```
  
 ### Local Development
