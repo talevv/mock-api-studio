@@ -29,10 +29,16 @@ export class EndpointController implements Controller {
       methodColor: mapMethodToColor(endpoint.method),
     }));
 
+    const updateSuccess = req.session.updateSuccess;
+    delete req.session.updateSuccess;
+    const createSuccess = req.session.createSuccess;
+    delete req.session.createSuccess;
+
     res.render('endpoints-list', {
       title: 'Mock API Studio - Endpoints',
       endpoints: endpointsWithStyles,
-      updateSuccess: false,
+      updateSuccess: updateSuccess,
+      createSuccess: createSuccess,
       serverRunning: this.serverState.getStatus() === ServerStatus.RUNNING,
     });
   }
@@ -90,6 +96,7 @@ export class EndpointController implements Controller {
       endpoint.headers = '{}';
     }
     await endpoint.save();
+    req.session.createSuccess = true;
     res.redirect('/endpoints');
   }
 
@@ -147,6 +154,7 @@ export class EndpointController implements Controller {
       endpoint.headers = '{}';
     }
     await endpoint.save();
+    req.session.updateSuccess = true;
     res.redirect('/endpoints');
   }
 

@@ -3,9 +3,15 @@
     <h1 class="text-2xl font-semibold text-slate-900">Endpoints</h1>
   </div>
 
+  {{#if createSuccess}}
+    <div class="mt-4 p-4 bg-green-100 text-green-800">
+      Endpoint created successfully!
+    </div>
+  {{/if}}
+
   {{#if updateSuccess}}
     <div class="mt-4 p-4 bg-green-100 text-green-800">
-      Endpoints updated successfully!
+      Endpoint updated successfully!
     </div>
   {{/if}}
 

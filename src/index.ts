@@ -1,5 +1,6 @@
 
 import express from 'express';
+import session from 'express-session';
 import path from 'path';
 import "reflect-metadata";
 import open from "open";
@@ -20,6 +21,13 @@ interface StartServerOptions {
 export const startServer = async (options?: StartServerOptions) => {
   const defaultPort = options?.port && parseInt(options.port.toString(), 10) || 3000;
   const app = express();
+  app.use(session({
+    // As a devtool, this is fine, but do not use hardcoded secrets in production!
+    secret: process.env.SESSION_SECRET || 'development-secret',
+    resave: false,
+    saveUninitialized: false,
+  }));
+  
   const serverState = new ServerState();
   const endpointController = new EndpointController(serverState);
   const serverController = new ServerController(serverState);
