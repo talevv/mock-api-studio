@@ -15,11 +15,13 @@ import {ServerState} from "./shared/server-state";
 
 interface StartServerOptions {
   port?: number;
+  mockPort?: number;
   open?: boolean;
 }
 
 export const startServer = async (options?: StartServerOptions) => {
   const defaultPort = options?.port && parseInt(options.port.toString(), 10) || 3000;
+  const mockPort = options?.mockPort && parseInt(options.mockPort.toString(), 10) || 4000;
   const app = express();
   app.use(session({
     // As a devtool, this is fine, but do not use hardcoded secrets in production!
@@ -27,10 +29,10 @@ export const startServer = async (options?: StartServerOptions) => {
     resave: false,
     saveUninitialized: false,
   }));
-  
+
   const serverState = new ServerState();
   const endpointController = new EndpointController(serverState);
-  const serverController = new ServerController(serverState);
+  const serverController = new ServerController(serverState, mockPort);
   
   app.engine('hbs', engine({
     extname: '.hbs',

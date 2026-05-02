@@ -6,9 +6,8 @@ import { logger } from "../logger";
 import { ServerState, ServerStatus } from "../shared/server-state";
 
 export class ServerController implements Controller {
-  constructor(private readonly serverState: ServerState) {}
+  constructor(private readonly serverState: ServerState, private readonly mockPort: number) {}
 
-  private defaultPort = 4000;
   private serverInstance: Server | null = null;
 
   routing: Route[] = [
@@ -31,7 +30,7 @@ export class ServerController implements Controller {
 
   run(req: any, res: any) {
     // TODO add support for custom port in the future, for now we will use the default port
-    const port = this.defaultPort;
+    const port = this.mockPort;
 
     if (this.serverState.getStatus() === ServerStatus.RUNNING) {
       logger.warn('Attempted to start server, but it is already running');
