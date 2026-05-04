@@ -5,6 +5,12 @@ A GUI-based utility for creating, managing, and running mock APIs. Design realis
 <img width="1920" height="996" alt="562_1x_shots_so" src="https://github.com/user-attachments/assets/38cb1e53-c042-4701-beae-f263e8dfe3ba" />
 
 
+## Features
+
+- **Create & Store Endpoints** – Define mock endpoints with custom responses via the GUI
+- **Activate/Deactivate** – Toggle which endpoints are active in your mock server
+- **Mock Server** – Run a fully functional mock API server from your stored endpoints
+
 ## Status
 
 🚧 **In Progress** – Core functionality is under active development.
@@ -50,12 +56,22 @@ npm run build
 npm start
 ```
 
+### Testing as a global npm package
 
-## Features
+Build the project and link it globally:
 
-- **Create & Store Endpoints** – Define mock endpoints with custom responses via the GUI
-- **Activate/Deactivate** – Toggle which endpoints are active in your mock server
-- **Mock Server** – Run a fully functional mock API server from your stored endpoints
+```bash
+npm run build
+npm link
+```
+
+Now you can run `mock-api-studio` from any directory as if it were installed from npm.
+
+To unlink when done:
+
+```bash
+npm unlink -g mock-api-studio
+```
 
 ## Coming Soon
 
