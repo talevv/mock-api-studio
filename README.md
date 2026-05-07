@@ -40,7 +40,7 @@ Options:
 ```bash
 git clone https://github.com/talevv/mock-api-studio
 cd mock-api-studio
-npm install
+npm ci
 ```
  
 **Run development server:**
