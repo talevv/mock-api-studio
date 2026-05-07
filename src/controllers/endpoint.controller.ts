@@ -57,6 +57,7 @@ export class EndpointController implements Controller {
       title: 'Mock API Studio - Endpoint',
       endpoint,
       methodColor: mapMethodToColor(endpoint.method),
+      serverRunning: this.serverState.getStatus() === ServerStatus.RUNNING,
     });
   }
   
@@ -76,6 +77,7 @@ export class EndpointController implements Controller {
   create(req: any, res: any) {
     res.render('endpoint-create', {
       title: 'Mock API Studio - Create Endpoint',
+      serverRunning: this.serverState.getStatus() === ServerStatus.RUNNING,
     });
   }
 
@@ -129,6 +131,7 @@ export class EndpointController implements Controller {
       title: 'Mock API Studio - Update Endpoint',
       endpoint,
       headers: headersArray,
+      serverRunning: this.serverState.getStatus() === ServerStatus.RUNNING,
     });
   }
 
