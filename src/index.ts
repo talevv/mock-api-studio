@@ -3,7 +3,6 @@ import express from 'express';
 import session from 'express-session';
 import path from 'path';
 import "reflect-metadata";
-import open from "open";
 import { engine } from 'express-handlebars';
 import { EndpointController } from './controllers/endpoint.controller';
 import { ServerController } from './controllers/server.controller';
@@ -65,6 +64,7 @@ export const startServer = async (options?: StartServerOptions) => {
     });
     
     if (options?.open) {
+      const open = (await import('open')).default;
       await open(`http://localhost:${port}`);
     }
   } catch (err: any) {
