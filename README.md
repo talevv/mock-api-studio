@@ -9,6 +9,7 @@ A GUI-based utility for creating, managing, and running mock APIs. Design realis
 - **Create & Store Endpoints** – Define mock endpoints with custom responses via the GUI
 - **Activate/Deactivate** – Toggle which endpoints are active in your mock server
 - **Mock Server** – Run a fully functional mock API server from your stored endpoints
+- **Response Delay** – Simulate slow responses to test loading states and timeouts
 
 ## Status
 
