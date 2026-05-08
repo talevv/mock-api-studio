@@ -76,7 +76,6 @@ npm unlink -g mock-api-studio
 ## Coming Soon
 
 - Collections/Projects – Organize endpoints into logical groups
-- HTTP options - delays
 - HTTP Interceptor – Capture and analyze requests to your mock API
 
 ---
