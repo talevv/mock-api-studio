@@ -82,12 +82,13 @@ export class EndpointController implements Controller {
   }
 
   async store(req: any, res: any) {
-    const { name, path, method, body, status, header_name, header_value } = req.body;
+    const { name, path, method, body, status, delay, header_name, header_value } = req.body;
     const endpoint = new Endpoint();
     endpoint.name = name;
     endpoint.path = path;
     endpoint.method = method;
     endpoint.status = status ? parseInt(status) : 200;
+    endpoint.delay = delay ? parseInt(delay) : 0;
     endpoint.body = body;
     endpoint.sortOrder = (await Endpoint.count()) + 1;
     // zip header_name and header_value into an object and save as json string in headers column
@@ -143,12 +144,13 @@ export class EndpointController implements Controller {
       res.status(404).send('Endpoint not found');
       return;
     }
-    const { name, path, method, body, status, header_name, header_value } = req.body;
+    const { name, path, method, body, status, delay, header_name, header_value } = req.body;
     endpoint.name = name;
     endpoint.path = path;
     endpoint.method = method;
     endpoint.body = body;
     endpoint.status = status ? parseInt(status) : 200;
+    endpoint.delay = delay ? parseInt(delay) : 0;
     // zip header_name and header_value into an object and save as json string in headers column
     if (header_name && header_value && Array.isArray(header_name) && Array.isArray(header_value)) {
       const headers: Record<string, string> = zip(header_name, header_value);

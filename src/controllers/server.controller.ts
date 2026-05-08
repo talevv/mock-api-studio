@@ -95,7 +95,13 @@ export class ServerController implements Controller {
             res.setHeader('Content-Type', 'application/json');
           }
 
-          res.status(endpoint.status).send(endpoint.body);
+          if (endpoint?.delay > 0) {
+            setTimeout(() => {
+              res.status(endpoint.status).send(endpoint.body);
+            }, endpoint.delay);
+          } else {
+            res.status(endpoint.status).send(endpoint.body);
+          }
         });
       }
     });

@@ -29,6 +29,10 @@
       <textarea name="body" id="body" rows="4" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2"></textarea>
     </div>
     <div>
+      <label for="delay" class="block text-sm font-medium text-slate-700">Delay (ms)</label>
+      <input type="number" name="delay" id="delay" required min="0" step="1" class="mt-1 block w-full border border-slate-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm px-3 py-2" value="0">
+    </div>
+    <div>
       {{> headers}}
     </div>
     <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">

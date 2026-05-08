@@ -20,6 +20,9 @@ export class Endpoint extends BaseEntity {
   @Column('text')
   body: string;
 
+  @Column({default: 0})
+  delay: number;
+
   @Column({ default: false })
   active: boolean;
 

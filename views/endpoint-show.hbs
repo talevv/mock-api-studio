@@ -23,6 +23,10 @@
           <pre class="bg-gray-100 p-2 rounded-md overflow-x-auto"><code>{{#if endpoint.body}}{{endpoint.body}}{{else}}No body defined{{/if}}</code></pre>
         </dd>
       </div>
+      <div class="mb-4">
+        <dt class="text-sm font-medium text-slate-500">Delay</dt>
+        <dd class="mt-1 text-sm text-slate-900">{{endpoint.delay}} ms</dd>
+      </div>
       <div>
         <dt class="text-sm font-medium text-slate-500">Active</dt>
         <dd class="mt-1 text-sm text-slate-900">{{#if endpoint.active}}Yes{{else}}No{{/if}}</dd>
