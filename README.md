@@ -2,8 +2,7 @@
 
 A GUI-based utility for creating, managing, and running mock APIs. Design realistic mock endpoints without writing code.
 
-<img width="1920" height="996" alt="562_1x_shots_so" src="https://github.com/user-attachments/assets/38cb1e53-c042-4701-beae-f263e8dfe3ba" />
-
+<img width="1916" height="1074" alt="757_1x_shots_so" src="https://github.com/user-attachments/assets/6f04b5c0-3e70-4385-a12a-bbaa6a7ee4bf" />
 
 ## Features
 
