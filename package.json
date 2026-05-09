@@ -1,6 +1,6 @@
 {
   "name": "mock-api-studio",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "main": "dist/index.js",
   "bin": {
     "mock-api-studio": "./dist/cli.js"
