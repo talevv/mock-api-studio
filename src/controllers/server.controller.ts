@@ -4,9 +4,14 @@ import express from 'express';
 import { Server } from "node:http";
 import { logger } from "../logger";
 import { ServerState, ServerStatus } from "../shared/server-state";
+import { EventEmitter } from "node:stream";
 
 export class ServerController implements Controller {
-  constructor(private readonly serverState: ServerState, private readonly mockPort: number) {}
+  constructor(private readonly serverState: ServerState, private readonly mockPort: number, private readonly serverEmitter: EventEmitter) {
+    this.serverEmitter.on('restart', () => {
+      this.restartServer();
+    });
+  }
 
   private serverInstance: Server | null = null;
 
@@ -61,6 +66,14 @@ export class ServerController implements Controller {
     res.render('server-stopped', {
       layout: false
     });
+  }
+
+  private restartServer() {
+    if (this.serverState.getStatus() === ServerStatus.RUNNING) {
+      logger.info('Restarting server due to endpoint changes');
+      this.stopServer();
+      this.runServer(this.mockPort);
+    }
   }
 
   private async runServer(port: number) {

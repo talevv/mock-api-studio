@@ -3,9 +3,10 @@ import { Controller, Route } from "../types";
 import { mapMethodToColor, zip } from "../helpers/helpers";
 import { logger } from "../logger";
 import { ServerState, ServerStatus } from "../shared/server-state";
+import { EventEmitter } from "stream";
 
 export class EndpointController implements Controller {
-  constructor(private readonly serverState: ServerState) {}
+  constructor(private readonly serverState: ServerState, private readonly serverEmitter: EventEmitter) {}
 
   routing: Route[] = [
     { method: 'get', path: '/endpoints', handler: this.index },
@@ -71,6 +72,7 @@ export class EndpointController implements Controller {
     }
     endpoint.active = !endpoint.active;
     await endpoint.save();
+    this.serverEmitter.emit('restart');
     res.status(200).send('Endpoint updated successfully');
   }
 
@@ -91,6 +93,7 @@ export class EndpointController implements Controller {
     endpoint.delay = delay ? parseInt(delay) : 0;
     endpoint.body = body;
     endpoint.sortOrder = (await Endpoint.count()) + 1;
+    endpoint.active = true;
     // zip header_name and header_value into an object and save as json string in headers column
     if (header_name && header_value && Array.isArray(header_name) && Array.isArray(header_value)) {
       const headers: Record<string, string> = zip(header_name, header_value);
@@ -99,6 +102,7 @@ export class EndpointController implements Controller {
       endpoint.headers = '{}';
     }
     await endpoint.save();
+    this.serverEmitter.emit('restart');
     req.session.createSuccess = true;
     res.redirect('/endpoints');
   }
@@ -112,6 +116,7 @@ export class EndpointController implements Controller {
       return;
     }
     await endpoint.remove();
+    this.serverEmitter.emit('restart');
     res.redirect('/endpoints');
   }
 
@@ -159,6 +164,7 @@ export class EndpointController implements Controller {
       endpoint.headers = '{}';
     }
     await endpoint.save();
+    this.serverEmitter.emit('restart');
     req.session.updateSuccess = true;
     res.redirect('/endpoints');
   }
@@ -182,6 +188,7 @@ export class EndpointController implements Controller {
       await endpoints[index].save();
       await endpoints[index + 1].save();
     }
+    this.serverEmitter.emit('restart');
     res.redirect('/endpoints');
   }
 

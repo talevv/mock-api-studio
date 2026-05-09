@@ -11,6 +11,7 @@ import { logger } from './logger';
 import { findFreePort } from './helpers/helpers';
 import { AppDataSource } from './db/data-source';
 import {ServerState} from "./shared/server-state";
+import { serverEmitter } from './shared/server-emitter';
 
 interface StartServerOptions {
   port?: number;
@@ -30,8 +31,8 @@ export const startServer = async (options?: StartServerOptions) => {
   }));
 
   const serverState = new ServerState();
-  const endpointController = new EndpointController(serverState);
-  const serverController = new ServerController(serverState, mockPort);
+  const endpointController = new EndpointController(serverState, serverEmitter);
+  const serverController = new ServerController(serverState, mockPort, serverEmitter);
   
   app.engine('hbs', engine({
     extname: '.hbs',
