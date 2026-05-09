@@ -11,10 +11,6 @@ A GUI-based utility for creating, managing, and running mock APIs. Design realis
 - **Mock Server** – Run a fully functional mock API server from your stored endpoints
 - **Response Delay** – Simulate slow responses to test loading states and timeouts
 
-## Status
-
-🚧 **In Progress** – Core functionality is under active development.
-
 ## Installation & Usage
  
 ```bash
