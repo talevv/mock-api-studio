@@ -17,7 +17,10 @@ A GUI-based utility for creating, managing, and running mock APIs. Design realis
 
 ## Installation & Usage
  
-> **Note:** npm package coming soon. Currently available via local development only.
+```bash
+npm install -g mock-api-studio
+mock-api-studio
+```
  
 The app starts a local Node server with a web-based GUI where you can create and manage your mock API endpoints.
  
